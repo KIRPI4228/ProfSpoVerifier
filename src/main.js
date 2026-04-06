@@ -1,0 +1,3 @@
+import ProfSpoParser from "./parser/ProfSpoParser";
+
+const parser = new ProfSpoParser("eyJpdiI6ImliWmtCSkVvZDI5a080UFY3aUI3TlE9PSIsInZhbHVlIjoiVktzejZ4RkwwaE4zakVyeTJIekN4dWFPZnF6eEZpc2lYSEVZUHB2Q2s5VDYrWDNTOHlaNTdTSloyZG9VXC9uQWQiLCJtYWMiOiJkNDFhNWU0NjllZjRkOTE0NDRmMDU5Y2YyNzBhMGE5MTdmYjk3YTY3MTVlNWQ3OTdlMDQ5Mjg3ODhmZWVjYzNmIn0%3D");
