@@ -1,37 +1,31 @@
-import Parser from "./Parser";
-import Resources from "../Resources";
+import Parser from "./Parser.js";
+import Resources from "../Resources.js";
 
 const getTasksUrl = Resources.GET_TASKS_HTML_URL;
 
-const taskButtonQuery = Resources.TASK_BUTTON_QUERY_SELECTOR;
-const taskCardQuery = Resources.TASK_CARD_QUERY_SELECTOR;
+const taskButtonClassName = Resources.TASK_BUTTON_CLASS_NAME;
 
 const taskButtonExcludeClassName = Resources.TASK_BUTTON_EXCLUDE_CLASS_NAME;
 
 export default class ProfSpoParser extends Parser {
     constructor(sessionId) {
         super(sessionId);
-        console.log(this.#getTasksHrefs(this.#getUncommitedTasks(this.#getTasksCards())));
     }
 
-    #getTasksHrefs(tasks) {
-        return tasks.map(task => this.#getTaskButton(task).getElement().href);
+    #getTasksHrefs = async (tasks) => {
+        return await tasks.map(task => task.getElement().href);
     }
 
-    #getUncommitedTasks(cards) {
-        return cards.filter(this.#isTaskUncommited);
+    #getUncommitedTasks = (buttons) => {
+        return buttons.filter(this.#isTaskUncommited);
     }
 
-    #getTasksCards() {
-        return this.getHtml(getTasksUrl).getItemsByQuery(taskCardQuery);
+    #getTasksButtons = async () => {
+        const html = await this.getHtml(getTasksUrl);
+        return html.getItemsByClassName(taskButtonClassName);
     }
 
-    #getTaskButton(task) {
-        return task.getItemsByQuery(taskButtonQuery)[0];
-    }
-
-    #isTaskUncommited(task) {
-        const buttons = this.#getTaskButton(task);
-        return buttons.length > 0 && !buttons[0].getElement().classList.contains(taskButtonExcludeClassName);
+    #isTaskUncommited = (task) => {
+        return !task.getElement().classList.contains(taskButtonExcludeClassName);
     }
 }

@@ -12,12 +12,12 @@ export default class Parser {
         };
     }
 
-    getHtml(url) {
-        return new Html(new JSDOM(this.requestGet(url)).window.document);
+    getHtml = async (url) => {
+        return new Html(new JSDOM(await this.requestGet(url)).window.document);
     }
 
-    requestGet(url) {
-        return axios.get(url, { headers: this.#defaultHeaders });
+    requestGet = async (url) => {
+        return (await axios.get(url, { headers: this.#defaultHeaders })).data;
     }
 }
 
@@ -27,26 +27,23 @@ export class Html {
         this.#dom = dom;
     }
 
-    #getItems(parse, isArray = true) {
-        const arrayComposer = [elements => elements, elements => Array.from(elements).map(element => new Html(element))];
-
-        const elements = parse(dom);
-        return arrayComposer[isArray](elements);
+    #getItems = (elements) => {
+        return Array.from(elements).map(element => new Html(element));
     }
 
-    getItemsById(id, isArray = true) {
-        return this.#getItems(() => this.#dom.getElementById(id), isArray);
+    getItemsById = (id) => {
+        return this.#getItems(this.#dom.getElementById(id));
     }
 
-    getItemsByClassName(className, isArray = true) {
-        return this.#getItems(() => this.#dom.getElementsByClassName(className), isArray);
+    getItemsByClassName = (className) => {
+        return this.#getItems(this.#dom.getElementsByClassName(className));
     }
 
-    getItemsByQuery(selector, isArray = true) {
-        return this.#getItems(() => this.#dom.querySelectorAll(selector), isArray);
+    getItemsByQuery = (selector) => {
+        return this.#getItems(this.#dom.querySelectorAll(selector));
     }
 
-    getElement() {
+    getElement = () => {
         return this.#dom;
     }
 }
