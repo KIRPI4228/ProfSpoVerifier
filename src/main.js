@@ -1,4 +1,6 @@
-import ProfSpoParser from "./parser/ProfSpoParser.js";
 import Resources from "./Resources.js";
+import Verifier from "./Verifier.js";
 
-const parser = new ProfSpoParser(Resources.SESSION_ID);
+const verifier = new Verifier(Resources.SESSION_ID);
+
+verifier.verifiAll();

@@ -12,8 +12,12 @@ export default class ProfSpoParser extends Parser {
         super(sessionId);
     }
 
-    #getTasksHrefs = async (tasks) => {
-        return await tasks.map(task => task.getElement().href);
+    getUncommitedTasksHrefs = async () => {
+        return this.#getTasksHrefs(this.#getUncommitedTasks(await this.#getTasksButtons()));
+    }
+
+    #getTasksHrefs = (tasks) => {
+        return tasks.map(task => task.getElement().href);
     }
 
     #getUncommitedTasks = (buttons) => {
