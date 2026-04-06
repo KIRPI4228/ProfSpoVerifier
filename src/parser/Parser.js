@@ -1,4 +1,5 @@
 import axios from "axios";
+import Logger from "../Logger.js";
 import { JSDOM } from "jsdom";
 
 export default class Parser {
@@ -6,17 +7,21 @@ export default class Parser {
     #defaultHeaders;
 
     constructor(sessionId) {
+        Logger.log(`Initialing Parser service`);
         this.#sessionId = sessionId;
         this.#defaultHeaders = {
             'Cookie': `laravel_session=${this.#sessionId};`
         };
+        Logger.log(`Parser service has been initialized successfully with session id - ${this.#sessionId}`);
     }
 
     getHtml = async (url) => {
+        Logger.log(`Getting html with url - ${url}`);
         return new Html(new JSDOM(await this.requestGet(url)).window.document);
     }
 
     requestGet = async (url) => {
+        Logger.log(`Making get request to url - ${url}`);
         return (await axios.get(url, { headers: this.#defaultHeaders })).data;
     }
 }

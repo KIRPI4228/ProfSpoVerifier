@@ -5,5 +5,7 @@ export default class Resources {
     static TASK_BUTTON_CLASS_NAME = 'btn btn-outline-info btn-sm';
     static TASK_BUTTON_EXCLUDE_CLASS_NAME = 'disabled';
 
+    static NOT_AUTHORIZED_ERROR = 'AxiosError: Request failed with status code 401';
+
     static SESSION_ID = process.env.SESSION_ID;
 }
