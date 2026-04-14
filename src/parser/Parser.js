@@ -1,18 +1,18 @@
 import axios from "axios";
 import Logger from "../Logger.js";
 import { JSDOM } from "jsdom";
+import { CookieJar } from "./Cookie.js";
 
 export default class Parser {
-    #sessionId;
-    #defaultHeaders;
+    static #instance;
+    static getInstance = () => this.#instance;
 
-    constructor(sessionId) {
+    #cookies = new CookieJar();
+
+    constructor() {
         Logger.log(`Initialing Parser service`);
-        this.#sessionId = sessionId;
-        this.#defaultHeaders = {
-            'Cookie': `laravel_session=${this.#sessionId};`
-        };
-        Logger.log(`Parser service has been initialized successfully with session id - ${this.#sessionId}`);
+        Parser.#instance = this;
+        Logger.log(`Parser service has been initialized successfully`);
     }
 
     getHtml = async (url) => {
@@ -20,9 +20,25 @@ export default class Parser {
         return new Html(new JSDOM(await this.requestGet(url)).window.document);
     }
 
-    requestGet = async (url) => {
+    requestGet = async (url, body, headers) => {
         Logger.log(`Making get request to url - ${url}`);
-        return (await axios.get(url, { headers: this.#defaultHeaders })).data;
+        return await this.#request(async (url, body, headers) => await axios.get(url, {headers: headers}), url, body, headers);
+    }
+
+    requestPost = async (url, body, headers) => {
+        Logger.log(`Making post request to url - ${url}`);
+        return await this.#request(async (url, body, headers) => await axios.post(url, body, {headers: headers}), url, body, headers);
+    }
+
+    #request = async (method, url, body, headers) => {
+        const response = await await method(url, body, {
+            'Cookie': this.#cookies.getAllCookiesText(),
+            'X-Requested-With': (headers ?? {XRequestedWith: ""}).XRequestedWith
+        });
+
+        this.#cookies.refresh(CookieJar.parseSetCookie(response.headers['set-cookie']));
+
+        return response;
     }
 }
 
