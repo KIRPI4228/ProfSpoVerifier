@@ -2,8 +2,6 @@ import Logger from "./Logger.js";
 import Resources from "./Resources.js";
 import Verifier from "./Verifier.js";
 
-const notAuthorizedError = Resources.NOT_AUTHORIZED_ERROR;
-
 export default class Ping {
     static _instance;
     static getInstance = () => this._instance;
