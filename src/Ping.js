@@ -1,15 +1,22 @@
 import Logger from "./Logger.js";
-import Parser from "./parser/Parser.js";
 import Resources from "./Resources.js";
+import Verifier from "./Verifier.js";
 
 const notAuthorizedError = Resources.NOT_AUTHORIZED_ERROR;
 
 export default class Ping {
+    static _instance;
+    static getInstance = () => this._instance;
+
     #interval;
-    constructor(intervalHours) {
+    constructor() {
         Logger.log(`Initializing Ping service`);
-        this.#interval = intervalHours * 60 * 60 * 1000;
-        Logger.log(`Ping service has been initialized successfully with interval - ${intervalHours} hours`);
+        if (Ping._instance === undefined) {
+            Ping._instance = this;
+        } else {
+            throw Resources.CREATE_SECOND_SINGLETON_ERROR;
+        }
+        Logger.log(`Ping service has been initialized successfully`);
     }
 
     #ping = async () => {
@@ -17,22 +24,20 @@ export default class Ping {
 
         Logger.log(`Trying to ping server with url - ${url}`);
         try {
-            await Parser.getInstance().requestGet(url);
+            await Verifier.getInstance().verifyAll();
             Logger.log(`Server has been successfully respond`);
         } catch (error) {
             Logger.log(`Server has not been respond or an error occurred`);
             
-            if (error === notAuthorizedError) {
-                Logger.warn(`Not authorized error occured`);
-            } else {
-                Logger.error(error);
-            }
+            //throw error;
         }
     }
 
     start = () => {
-        Logger.log(`Starting asynchronous ping service`);
-        setInterval(this.#ping, this.#interval);
+        const interval = Resources.PING_INTERVAL;
+
+        Logger.log(`Starting asynchronous ping service with interval - ${interval}`);
+        setInterval(this.#ping, interval * 60 * 60 * 1000);
         Logger.log(`Ping asynchronous has been started`);
     }
 }

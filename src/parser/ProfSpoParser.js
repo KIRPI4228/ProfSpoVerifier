@@ -9,6 +9,7 @@ const taskButtonClassName = Resources.TASK_BUTTON_CLASS_NAME;
 const taskButtonExcludeClassName = Resources.TASK_BUTTON_EXCLUDE_CLASS_NAME;
 
 export default class ProfSpoParser extends Parser {
+
     getUncommitedTasksHrefs = async () => {
         Logger.log(`Getting uncommited tasks hrefs`);
         return this.#getTasksHrefs(this.#getUncommitedTasks(await this.#getTasksButtons()));

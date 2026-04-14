@@ -2,16 +2,22 @@ import axios from "axios";
 import Logger from "../Logger.js";
 import { JSDOM } from "jsdom";
 import { CookieJar } from "./Cookie.js";
+import Resources from "../Resources.js";
 
 export default class Parser {
-    static #instance;
-    static getInstance = () => this.#instance;
+    static _instance;
+    static getInstance = () => this._instance;
 
     #cookies = new CookieJar();
 
     constructor() {
         Logger.log(`Initialing Parser service`);
-        Parser.#instance = this;
+        if (Parser._instance === undefined) {
+            Parser._instance = this;
+        } else {
+            throw Resources.CREATE_SECOND_SINGLETON_ERROR;
+        }
+        
         Logger.log(`Parser service has been initialized successfully`);
     }
 
