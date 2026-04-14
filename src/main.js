@@ -32,7 +32,6 @@ const login = async () => await Authorization.getInstance().login(email, passwor
 try {
     await main();
 } catch (error) {
-    Logger.debug("sdf");
     if (error.message === Resources.NOT_AUTHORIZED_ERROR) {
         Logger.warn(`Not authorized error occured`);
         await login();
