@@ -48,6 +48,9 @@ web_modules/
 
 .vscode/
 
+logs/
+*.log
+
 # TypeScript cache
 *.tsbuildinfo
 
