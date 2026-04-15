@@ -1,3 +1,8 @@
+# ProfSpoVerifier
+**Automatic verifies all tasks in `profspo.ru`**
+
+## Docker compose example
+```yaml
 services:
   profspo-verifier:
     image: profspo-verifier
@@ -12,3 +17,4 @@ services:
       - PROFSPOVERIFIER_DO_TRACE_LOGGING=true # Do log errors traces
 
       - PROFSPOVERIFIER_PING_INTERVAL=12 # Interval between verifing in hours
+```
