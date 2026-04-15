@@ -9,7 +9,6 @@ export default class Resources {
     static NOT_AUTHORIZED_ERROR = 'Request failed with status code 401';
     static CREATE_SECOND_SINGLETON_ERROR = 'It is impossible to create already existing singleton class'
 
-    static SESSION_ID = process.env.PROFSPOVERIFIER_SESSION_ID;
     static AUTHORIZATION_EMAIL = process.env.PROFSPOVERIFIER_AUTH_EMAIL;
     static AUTHORIZATION_PASSWORD = process.env.PROFSPOVERIFIER_AUTH_PASSWORD;
 
